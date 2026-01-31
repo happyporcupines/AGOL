@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Happyporcupine's Lab 1</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+  <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
+  <script src="https://js.arcgis.com/4.25/"></script>
+  <script>
+    require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/widgets/BasemapGallery",
+      "esri/widgets/Expand",
+      "esri/Basemap",
+      "esri/widgets/Locate",
+      "esri/widgets/Search"
+    ], function(esriConfig, Map, MapView, BasemapGallery, Expand, Basemap, Locate, Search) {
+
+      esriConfig.apiKey = "AAAPTxy8BH1VEsoebNVZXo8HurP99AuF0u6hFXE5XsMHKuzBSGN5LvVSYilawxafx85hnjGKQIucDXRL6XFw-7thGF-uk0aVFzmTfpZIdLPlDptV3DwRJMoTI46gFfAZg91heVrVKDrPxtZ2kprYUaxsosQ7mAA3INNtJE36tp9pvCkN14AMLWxssJRq3J2UEOC32gjoMtV1KsLPKUKhISAWDnt1hHRkirKuliAFLg79e5lEq1xlI52nLi3GiWhJ6EuceAT1_FDERp6GXAPTxy8BH1VEsoebNVZXo8HurP99AuF0u6hFXE5XsMHKuzBSGN5LvVSYilawxafx85hnye6aLKi3n6Zz6jpamVj3K_fKizzNd0T_PWfZuEpZ4aPF2jnf78BA6gmiKVMIqX_NDTPwEfczqPt8iU_gc7o7n0EcVXC-sbWEjGlqgpawvKA6ZvwFQjUMF6co6Pz09sxSZqKABYjxr9U5zVIt94EmOYh6ER2IgehHEihin99ZrjK0g-mFqXjG6qEc0blleJmzAT1_FDERp6GX";
+
+      const map = new Map({
+        basemap: "national-geographic"
+      });
+
+      // to avoid rendering issues on linux environments, raster maps are easier to use
+      const view = new MapView({
+        map: map,
+        center: [-78.9002, 35.9956],
+        zoom: 12,
+        container: "viewDiv"
+      });
+
+      //adding in a widget that draws from a few specific raster types
+      const basemapGallery = new BasemapGallery({
+        view: view,
+        //manually list the raster maps here to prevent crashes
+        source: [
+          Basemap.fromId("national-geographic"),
+          Basemap.fromId("topo"),
+          Basemap.fromId("satellite"),
+          Basemap.fromId("oceans"),
+          Basemap.fromId("osm"),
+          Basemap.fromId("terrain")
+        ]
+      });
+
+      //put the widget in an expander
+      const bgExpand = new Expand({
+        view: view,
+        content: basemapGallery,
+        autoCollapse: true //autoclose the menu
+      });
+
+      //put widget in top right
+      view.ui.add(bgExpand, "top-right");
+
+      // --- CHALLENGE 4: Locate Button ---
+      const locateBtn = new Locate({
+        view: view
+      });
+
+      view.ui.add(locateBtn, {
+        position: "top-left"
+      });
+
+      //add in search widget
+      const searchWidget = new Search({
+        view: view,
+        suggestionsEnabled: true, //makes sure the autofill for addresses is working
+      });
+
+      //puts search widget under the other top right widget
+      view.ui.add(searchWidget, {
+        position: "top-right"
+      });
+
+    });
+  </script>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+<h1>Lab 1</h1>
+<div id="viewDiv"></div>
+</body>
+</html>
