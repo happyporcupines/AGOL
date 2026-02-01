@@ -19,8 +19,9 @@
       "esri/widgets/Search",
       "esri/Graphic",
       "esri/layers/GraphicsLayer",
-      "esri/layers/FeatureLayer"
-    ], function(esriConfig, Map, MapView, BasemapGallery, Expand, Basemap, Locate, Search, Graphic, GraphicsLayer, FeatureLayer) {
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Legend"
+    ], function(esriConfig, Map, MapView, BasemapGallery, Expand, Basemap, Locate, Search, Graphic, GraphicsLayer, FeatureLayer, Legend) {
 
       esriConfig.apiKey = "AAAPTxy8BH1VEsoebNVZXo8HurP99AuF0u6hFXE5XsMHKuzBSGN5LvVSYilawxafx85hnye6aLKi3n6Zz6jpamVj3K_fKizzNd0T_PWfZuEpZ4aPF2jnf78BA6gmiKVMIqX_NDTPwEfczqPt8iU_gc7o7n0EcVXC-sbWEjGlqgpawvKA6ZvwFQjUMF6co6Pz09sxSZqKABYjxr9U5zVIt94EmOYh6ER2IgehHEihin99ZrjK0g-mFqXjG6qEc0blleJmzAT1_FDERp6GX";
       const map = new Map({
@@ -36,17 +37,19 @@
       // This layer uses a REST URL to fetch Dynamic Content from the Living Atlas
       const inatLayer = new FeatureLayer({
         url: "https://services.arcgis.com/P3ePLMYs2RVChqBA/arcgis/rest/services/iNaturalist_Observations_Public/FeatureServer/0",
+        // Broadening the filter for testing
         definitionExpression: "scientific_name LIKE 'Castanea%'",
-        outFields: ["scientific_name", "common_name"],
-        // This forces the map to draw every point as a bright orange circle
+        outFields: ["*"],
+        // Explicitly defining a bright renderer
         renderer: {
-          type: "simple", 
+          type: "simple",
           symbol: {
             type: "simple-marker",
+            style: "circle",
             color: "orange",
-            size: "8px",
+            size: "10px",
             outline: {
-              color: "white",
+              color: [255, 255, 255],
               width: 1
             }
           }
@@ -207,7 +210,7 @@
       const exploreRegionGraphic = new Graphic({
         geometry: explorePolygon,
         symbol: greenPolygon
-      })
+      });
       // creating the polyline graphic
       const pathGraphic = new Graphic({
         geometry: explorePath,
@@ -264,6 +267,15 @@
       view.ui.add(searchWidget, {
         position: "top-right"
       });
+      //add legend to check
+      const legend = new Legend({
+        view: view,
+        layerInfos: [{
+          layer: inatLayer,
+          title: "Chestnut Observations"
+        }]
+      });
+      view.ui.add(legend, "bottom-left");
 
     });
   </script>
