@@ -38,6 +38,19 @@
         url: "https://services.arcgis.com/P3ePLMYs2RVChqBA/arcgis/rest/services/iNaturalist_Observations_Public/FeatureServer/0",
         definitionExpression: "scientific_name LIKE 'Castanea%'",
         outFields: ["scientific_name", "common_name"],
+        // This forces the map to draw every point as a bright orange circle
+        renderer: {
+          type: "simple", 
+          symbol: {
+            type: "simple-marker",
+            color: "orange",
+            size: "8px",
+            outline: {
+              color: "white",
+              width: 1
+            }
+          }
+        },
         popupTemplate: {
           title: "{common_name}",
           content: "Scientific Name: {scientific_name}"
