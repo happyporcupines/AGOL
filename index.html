@@ -55,10 +55,21 @@
           width: 1
         }
       };
+      // defining popup properties
+      const popupTemplate = {
+        title: "{Name}",
+        content: "{Description}"
+      }
+      const attributes = {
+        Name: "Duke Lemur Center",
+        Description: "Founded in 1966 on the campus of Duke University in Durham, NC, the Duke Lemur Center is a world leader in the study, care, and protection of lemurs—Earth’s most threatened group of mammals."
+      }
       //creating the point
       const pointGraphic = new Graphic({
         geometry: point,
-        symbol: simpleMarkerSymbol
+        symbol: simpleMarkerSymbol,
+        attributes: attributes,
+        popupTemplate: popupTemplate
       });
       // adding the point to the graphics layer
       graphicsLayer.add(pointGraphic);
